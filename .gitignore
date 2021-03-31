@@ -3,3 +3,6 @@
 ################################################################################
 
 /DestinationboardServer/bin/Debug/net5.0
+/DestinationboardServer/Migrations
+/DestinationboardServer/obj
+/.vs/DestinationboardServer/v16
