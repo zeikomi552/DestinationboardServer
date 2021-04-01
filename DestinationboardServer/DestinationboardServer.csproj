@@ -6,11 +6,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\Comm\**" />
+    <EmbeddedResource Remove="Common\Comm\**" />
+    <None Remove="Common\Comm\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DestinationboardCommunicationLibrary\DestinationboardCommunicationLibrary\DestinationboardCommunicationLibrary\DestinationboardCommunicationLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Communication\" />
   </ItemGroup>
 
 </Project>
