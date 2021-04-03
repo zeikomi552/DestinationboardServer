@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Communication\" />
-    <Folder Include="Common\DBManager\SQLite\Tables\" />
   </ItemGroup>
 
 </Project>
