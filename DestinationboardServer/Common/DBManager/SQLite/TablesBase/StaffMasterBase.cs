@@ -17,7 +17,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 	[Table("StaffMaster")]
 	public class StaffMasterBase : INotifyPropertyChanged
 	{
-
+		#region パラメータ
 		#region 従業員ID[StaffID]プロパティ
 		/// <summary>
 		/// 従業員ID[StaffID]プロパティ用変数
@@ -150,6 +150,118 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		#endregion
 
 
+		#endregion
+
+		#region 関数
+		#region コンストラクタ
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public StaffMasterBase()
+		{
+
+		}
+		#endregion
+
+		#region コピーコンストラクタ
+		/// <summary>
+		/// コピーコンストラクタ
+		/// </summary>
+		/// <param name="item">コピー内容</param>
+		public StaffMasterBase(StaffMasterBase item)
+		{
+			// 要素のコピー
+			Copy(item);
+		}
+		#endregion
+
+		#region コピー
+		/// <summary>
+		/// コピー
+		/// </summary>
+		/// <param name="item">コピー内容</param>
+		public void Copy(StaffMasterBase item)
+		{
+			this.StaffID = item.StaffID;
+
+			this.StaffName = item.StaffName;
+
+			this.Display = item.Display;
+
+			this.CreateDate = item.CreateDate;
+
+			this.CreateUser = item.CreateUser;
+
+
+		}
+		#endregion
+
+		#region Insert処理
+		/// <summary>
+		/// Insert処理
+		/// </summary>
+		/// <param name="item">Insertする要素</param>
+		public static void Insert(StaffMasterBase item)
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				// Insert
+				db.Add<StaffMasterBase>(item);
+
+				// コミット
+				db.SaveChanges();
+			}
+		}
+		#endregion
+
+		#region Update処理
+		/// <summary>
+		/// Update処理
+		/// </summary>
+		/// <param name="pk_item">更新する主キー（主キーの値のみ入っていれば良い）</param>
+		/// <param name="update_item">テーブル更新後の状態</param>
+		public static void Update(StaffMasterBase pk_item, StaffMasterBase update_item)
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				var item = db.DbSet_StaffMaster.Single(x => x.StaffID.Equals(pk_item.StaffID));
+				item.Copy(update_item);
+
+				db.SaveChanges();
+			}
+		}
+		#endregion
+
+		#region Delete処理
+		/// <summary>
+		/// Delete処理
+		/// </summary>
+		/// <param name="pk_item">削除する主キー（主キーの値のみ入っていれば良い）</param>
+		public static void Delete(StaffMasterBase pk_item)
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				var item = db.DbSet_StaffMaster.Single(x => x.StaffID.Equals(pk_item.StaffID));
+				db.DbSet_StaffMaster.Remove(item);
+				db.SaveChanges();
+			}
+		}
+		#endregion
+
+		#region Select処理
+		/// <summary>
+		/// Select処理
+		/// </summary>
+		/// <returns>全件取得</returns>
+		public static List<StaffMasterBase> Select()
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				return db.DbSet_StaffMaster.ToList<StaffMasterBase>();
+			}
+		}
+		#endregion
+		#endregion
 
 		#region INotifyPropertyChanged 
 		public event PropertyChangedEventHandler PropertyChanged;

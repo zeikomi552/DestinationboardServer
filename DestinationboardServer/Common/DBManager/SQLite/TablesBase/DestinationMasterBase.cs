@@ -17,7 +17,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 	[Table("DestinationMaster")]
 	public class DestinationMasterBase : INotifyPropertyChanged
 	{
-
+		#region パラメータ
 		#region 行先ID[DestinationID]プロパティ
 		/// <summary>
 		/// 行先ID[DestinationID]プロパティ用変数
@@ -202,6 +202,122 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		#endregion
 
 
+		#endregion
+
+		#region 関数
+		#region コンストラクタ
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public DestinationMasterBase()
+		{
+
+		}
+		#endregion
+
+		#region コピーコンストラクタ
+		/// <summary>
+		/// コピーコンストラクタ
+		/// </summary>
+		/// <param name="item">コピー内容</param>
+		public DestinationMasterBase(DestinationMasterBase item)
+		{
+			// 要素のコピー
+			Copy(item);
+		}
+		#endregion
+
+		#region コピー
+		/// <summary>
+		/// コピー
+		/// </summary>
+		/// <param name="item">コピー内容</param>
+		public void Copy(DestinationMasterBase item)
+		{
+			this.DestinationID = item.DestinationID;
+
+			this.DestinationName = item.DestinationName;
+
+			this.ActionID = item.ActionID;
+
+			this.CreateDate = item.CreateDate;
+
+			this.CreateUser = item.CreateUser;
+
+			this.UpdateDate = item.UpdateDate;
+
+			this.UpdateUser = item.UpdateUser;
+
+
+		}
+		#endregion
+
+		#region Insert処理
+		/// <summary>
+		/// Insert処理
+		/// </summary>
+		/// <param name="item">Insertする要素</param>
+		public static void Insert(DestinationMasterBase item)
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				// Insert
+				db.Add<DestinationMasterBase>(item);
+
+				// コミット
+				db.SaveChanges();
+			}
+		}
+		#endregion
+
+		#region Update処理
+		/// <summary>
+		/// Update処理
+		/// </summary>
+		/// <param name="pk_item">更新する主キー（主キーの値のみ入っていれば良い）</param>
+		/// <param name="update_item">テーブル更新後の状態</param>
+		public static void Update(DestinationMasterBase pk_item, DestinationMasterBase update_item)
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				var item = db.DbSet_DestinationMaster.Single(x => x.DestinationID.Equals(pk_item.DestinationID));
+				item.Copy(update_item);
+
+				db.SaveChanges();
+			}
+		}
+		#endregion
+
+		#region Delete処理
+		/// <summary>
+		/// Delete処理
+		/// </summary>
+		/// <param name="pk_item">削除する主キー（主キーの値のみ入っていれば良い）</param>
+		public static void Delete(DestinationMasterBase pk_item)
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				var item = db.DbSet_DestinationMaster.Single(x => x.DestinationID.Equals(pk_item.DestinationID));
+				db.DbSet_DestinationMaster.Remove(item);
+				db.SaveChanges();
+			}
+		}
+		#endregion
+
+		#region Select処理
+		/// <summary>
+		/// Select処理
+		/// </summary>
+		/// <returns>全件取得</returns>
+		public static List<DestinationMasterBase> Select()
+		{
+			using (var db = new SQLiteDataContext())
+			{
+				return db.DbSet_DestinationMaster.ToList<DestinationMasterBase>();
+			}
+		}
+		#endregion
+		#endregion
 
 		#region INotifyPropertyChanged 
 		public event PropertyChangedEventHandler PropertyChanged;
