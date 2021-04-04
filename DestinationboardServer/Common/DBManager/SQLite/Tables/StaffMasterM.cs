@@ -13,7 +13,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		/// <summary>
 		/// Delete処理
 		/// </summary>
-		public static void UpdateList(RegstStaffRequest request)
+		public static void UpdateList(RegistStaffRequest request)
 		{
 			using (var db = new SQLiteDataContext())
 			{

@@ -14,7 +14,7 @@ namespace DestinationboardServer
             DestinationbardCommunicationAPIService service 
                 = new DestinationbardCommunicationAPIService("127.0.0.1", 552);
 
-            service.RecieveRegstStaffEvent += Service_RecieveRegstStaffEvent;
+            service.RecieveRegistStaffEvent += Service_RecieveRegstStaffEvent;
 
 
             service.Listen();
@@ -28,8 +28,8 @@ namespace DestinationboardServer
         {
             //throw new NotImplementedException();
 
-            RegstStaffRequest request = ((EventArgsRcv)e).Request as RegstStaffRequest;
-            RegstStaffReply reply = ((EventArgsRcv)e).Replay as RegstStaffReply;
+            RegistStaffRequest request = ((gRPCArgsRcv)e).Request as RegistStaffRequest;
+            RegistStaffReply reply = ((gRPCArgsRcv)e).Replay as RegistStaffReply;
 
             try
             {
