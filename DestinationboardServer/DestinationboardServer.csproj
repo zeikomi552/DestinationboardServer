@@ -23,8 +23,4 @@
     <ProjectReference Include="..\..\DestinationboardCommunicationLibrary\DestinationboardCommunicationLibrary\DestinationboardCommunicationLibrary\DestinationboardCommunicationLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Communication\" />
-  </ItemGroup>
-
 </Project>
