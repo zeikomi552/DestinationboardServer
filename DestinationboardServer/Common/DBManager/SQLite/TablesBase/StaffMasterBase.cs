@@ -88,7 +88,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (!_Display.Equals(value))
+				if (_Display == null || !_Display.Equals(value))
 				{
 					_Display = value;
 					NotifyPropertyChanged("Display");
@@ -114,7 +114,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (!_CreateDate.Equals(value))
+				if (_CreateDate == null || !_CreateDate.Equals(value))
 				{
 					_CreateDate = value;
 					NotifyPropertyChanged("CreateDate");
@@ -224,10 +224,13 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		{
 			using (var db = new SQLiteDataContext())
 			{
-				var item = db.DbSet_StaffMaster.Single(x => x.StaffID.Equals(pk_item.StaffID));
-				item.Copy(update_item);
+				var item = db.DbSet_StaffMaster.SingleOrDefault(x => x.StaffID.Equals(pk_item.StaffID));
 
-				db.SaveChanges();
+				if (item != null)
+				{
+					item.Copy(update_item);
+					db.SaveChanges();
+				}
 			}
 		}
 		#endregion
@@ -241,9 +244,12 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		{
 			using (var db = new SQLiteDataContext())
 			{
-				var item = db.DbSet_StaffMaster.Single(x => x.StaffID.Equals(pk_item.StaffID));
-				db.DbSet_StaffMaster.Remove(item);
-				db.SaveChanges();
+				var item = db.DbSet_StaffMaster.SingleOrDefault(x => x.StaffID.Equals(pk_item.StaffID));
+				if (item != null)
+				{
+					db.DbSet_StaffMaster.Remove(item);
+					db.SaveChanges();
+				}
 			}
 		}
 		#endregion
