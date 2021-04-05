@@ -8,15 +8,21 @@ namespace DestinationboardServer
 {
     class Program
     {
-        public event EventHandler RecieveStaff;
-
+        /// <summary>
+        /// メイン関数
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
+            // サービスの作成
             DestinationbardCommunicationAPIService service 
                 = new DestinationbardCommunicationAPIService(CommonValues.GetInstance().ServerName, CommonValues.GetInstance().Port);
 
-            service.RecieveRegistStaffEvent += Service_RecieveRegstStaffEvent;
-            service.RecieveGetRegistStaffEvent += Service_RecieveGetRegistStaffEvent;
+            // スタッフ情報登録処理用イベント
+            service.RecieveRegistStaffEvent += Service_RecieveRegistStaffEvent;
+
+            // スタッフ情報取得用イベント
+            service.RecieveGetStaffsEvent += Service_RecieveGetStaffEvent;
 
 
 
@@ -27,25 +33,31 @@ namespace DestinationboardServer
 
         }
 
-        private static void Service_RecieveGetRegistStaffEvent(object sender, EventArgs e)
+        /// <summary>
+        /// スタッフ情報取得用イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void Service_RecieveGetStaffEvent(object sender, EventArgs e)
         {
-            GetStaffsRequest request = ((gRPCArgsRcv)e).Request as GetStaffsRequest;
-            GetStaffsReply reply = ((gRPCArgsRcv)e).Replay as GetStaffsReply;
+            GetStaffsRequest request = ((gRPCArgsRcv)e).Request as GetStaffsRequest;    // リクエスト
+            GetStaffsReply reply = ((gRPCArgsRcv)e).Replay as GetStaffsReply;           // リプライ
 
             try
             {
-
+                // スタッフ情報の取得処理(DBアクセス)
                 var list = StaffMasterM.Select();
                 
+                // 取得データを通信用に変換
                 foreach (var item in list)
                 {
                     StaffMasterReply tmp = new StaffMasterReply();
-                    tmp.StaffID = item.StaffID;
-                    tmp.StaffName = item.StaffName;
-                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");
-                    tmp.CreateUser = item.CreateUser;
-                    tmp.Display = item.Display;
-                    reply.StaffInfoList.Add(tmp);
+                    tmp.StaffID = item.StaffID;                                 // スタッフ情報
+                    tmp.StaffName = item.StaffName;                             // スタッフ名
+                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 日付
+                    tmp.CreateUser = item.CreateUser;                           // ユーザー名
+                    tmp.Display = item.Display;                                 // 表示/非表示
+                    reply.StaffInfoList.Add(tmp);                               // リストへ追加
                 }
 
             }
@@ -56,16 +68,19 @@ namespace DestinationboardServer
         }
 
 
-
-        private static void Service_RecieveRegstStaffEvent(object sender, EventArgs e)
+        /// <summary>
+        /// スタッフ情報登録用イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void Service_RecieveRegistStaffEvent(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
-
-            RegistStaffRequest request = ((gRPCArgsRcv)e).Request as RegistStaffRequest;
-            RegistStaffReply reply = ((gRPCArgsRcv)e).Replay as RegistStaffReply;
+            RegistStaffRequest request = ((gRPCArgsRcv)e).Request as RegistStaffRequest;    // リクエスト
+            RegistStaffReply reply = ((gRPCArgsRcv)e).Replay as RegistStaffReply;           // リプライ
 
             try
             {
+                // データベース登録処理
                 StaffMasterM.UpdateList(request);
 
             }
