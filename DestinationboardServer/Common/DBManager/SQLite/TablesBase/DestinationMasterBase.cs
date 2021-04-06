@@ -45,6 +45,32 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		}
 		#endregion
 
+		#region ソート順[SortOrder]プロパティ
+		/// <summary>
+		/// ソート順[SortOrder]プロパティ用変数
+		/// </summary>
+		Int32 _SortOrder = 0;
+		/// <summary>
+		/// ソート順[SortOrder]プロパティ
+		/// </summary>
+		[Column("SortOrder")]
+		public Int32 SortOrder
+		{
+			get
+			{
+				return _SortOrder;
+			}
+			set
+			{
+				if (_SortOrder == null || !_SortOrder.Equals(value))
+				{
+					_SortOrder = value;
+					NotifyPropertyChanged("SortOrder");
+				}
+			}
+		}
+		#endregion
+
 		#region 行先名[DestinationName]プロパティ
 		/// <summary>
 		/// 行先名[DestinationName]プロパティ用変数
@@ -235,6 +261,8 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		public void Copy(DestinationMasterBase item)
 		{
 			this.DestinationID = item.DestinationID;
+
+			this.SortOrder = item.SortOrder;
 
 			this.DestinationName = item.DestinationName;
 

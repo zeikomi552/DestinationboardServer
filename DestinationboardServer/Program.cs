@@ -53,6 +53,7 @@ namespace DestinationboardServer
                 {
                     StaffMasterReply tmp = new StaffMasterReply();
                     tmp.StaffID = item.StaffID;                                 // スタッフ情報
+                    tmp.SortOrder = item.SortOrder;                             // ソート順
                     tmp.StaffName = item.StaffName;                             // スタッフ名
                     tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 日付
                     tmp.CreateUser = item.CreateUser;                           // ユーザー名

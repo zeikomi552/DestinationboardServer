@@ -45,6 +45,32 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		}
 		#endregion
 
+		#region ソート順[SortOrder]プロパティ
+		/// <summary>
+		/// ソート順[SortOrder]プロパティ用変数
+		/// </summary>
+		Int32 _SortOrder = 0;
+		/// <summary>
+		/// ソート順[SortOrder]プロパティ
+		/// </summary>
+		[Column("SortOrder")]
+		public Int32 SortOrder
+		{
+			get
+			{
+				return _SortOrder;
+			}
+			set
+			{
+				if (!_SortOrder.Equals(value))
+				{
+					_SortOrder = value;
+					NotifyPropertyChanged("SortOrder");
+				}
+			}
+		}
+		#endregion
+
 		#region 従業員名[StaffName]プロパティ
 		/// <summary>
 		/// 従業員名[StaffName]プロパティ用変数
@@ -88,7 +114,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (_Display == null || !_Display.Equals(value))
+				if (!_Display.Equals(value))
 				{
 					_Display = value;
 					NotifyPropertyChanged("Display");
@@ -114,7 +140,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (_CreateDate == null || !_CreateDate.Equals(value))
+				if (!_CreateDate.Equals(value))
 				{
 					_CreateDate = value;
 					NotifyPropertyChanged("CreateDate");
@@ -183,6 +209,8 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		public void Copy(StaffMasterBase item)
 		{
 			this.StaffID = item.StaffID;
+
+			this.SortOrder = item.SortOrder;
 
 			this.StaffName = item.StaffName;
 
@@ -281,5 +309,6 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		}
 		#endregion
 	}
+
 
 }

@@ -38,6 +38,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 							insert_item.StaffID = tmp.StaffID;
 							insert_item.StaffName = tmp.StaffName;
 							insert_item.Display = tmp.Display;
+							insert_item.SortOrder = tmp.SortOrder;
 							insert_item.CreateDate = DateTime.Today;
 							insert_item.CreateUser = tmp.CreateUser;
 							db.Add<StaffMasterBase>(insert_item);
@@ -47,10 +48,9 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 						db.SaveChanges();
 						tran.Commit();
 					}
-					catch (Exception e)
+					catch (Exception)
 					{
 						tran.Rollback();
-						throw e;
 					}
 				}
 			}
