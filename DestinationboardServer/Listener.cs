@@ -25,7 +25,7 @@ namespace DestinationboardServer
         /// </summary>
         public Listener()
         {
-            if (this._Service != null)
+            if (this._Service == null)
             {
                 // サービスの作成
                 this._Service = new DestinationbardCommunicationAPIService(CommonValues.GetInstance().ServerName, CommonValues.GetInstance().Port);
