@@ -62,7 +62,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (_SortOrder == null || !_SortOrder.Equals(value))
+				if (!_SortOrder.Equals(value))
 				{
 					_SortOrder = value;
 					NotifyPropertyChanged("SortOrder");
@@ -114,7 +114,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (_CreateDate == null || !_CreateDate.Equals(value))
+				if (!_CreateDate.Equals(value))
 				{
 					_CreateDate = value;
 					NotifyPropertyChanged("CreateDate");
@@ -166,7 +166,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			}
 			set
 			{
-				if (_UpdateDate == null || !_UpdateDate.Equals(value))
+				if (!_UpdateDate.Equals(value))
 				{
 					_UpdateDate = value;
 					NotifyPropertyChanged("UpdateDate");
