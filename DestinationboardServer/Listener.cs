@@ -50,7 +50,7 @@ namespace DestinationboardServer
             this._Service.RecieveGetActionsEvent += _Service_RecieveGetActionsEvent;
 
             // 行動予定情報登録用イベント
-            this._Service.RecieveRegistActionPlanEvent += _Service_RecieveRegistActionPlanEvent;
+            this._Service.RecieveRegistActionPlansEvent += _Service_RecieveRegistActionPlanEvent;
 
             // 行動予定一覧取得用イベント
             this._Service.RecieveGetActionPlansEvent += _Service_RecieveGetActionPlansEvent;
@@ -85,7 +85,50 @@ namespace DestinationboardServer
         /// <param name="e"></param>
         private void _Service_RecieveGetActionPlansEvent(object sender, EventArgs e)
         {
+            GetActionPlansRequest request = ((gRPCArgsRcv)e).Request as GetActionPlansRequest;    // リクエスト
+            GetActionPlansReply reply = ((gRPCArgsRcv)e).Replay as GetActionPlansReply;           // リプライ
 
+            try
+            {
+                // スタッフ情報の取得処理(DBアクセス)
+                var list = ActionPlanTableM.Select();
+
+                // 取得データを通信用に変換
+                foreach (var item in list)
+                {
+                    ActionPlanTableReply tmp = new ActionPlanTableReply();
+                    tmp.StaffID = item.StaffID;                 // 従業員情報
+                    tmp.StaffName = item.StaffName;             // 従業員名
+                    tmp.ActionID = item.ActionID;               // 行動ID
+                    tmp.ActionName = item.ActionName;           // 行動名
+                    tmp.DestinationID = item.DestinationID;     // 行先ID
+                    tmp.DestinationName = item.DestinationName; // 行先
+
+                    tmp.FromTime = string.Empty;
+                    // 値がある場合
+                    if (item.FromTime.HasValue)
+                    {
+                        tmp.FromTime = item.FromTime.Value.ToString("yyyy/MM/dd HH:mm:ss");
+                    }
+
+                    tmp.ToTime = string.Empty;
+                    // 値がある場合
+                    if (item.ToTime.HasValue)
+                    {
+                        tmp.ToTime = item.ToTime.Value.ToString("yyyy/MM/dd HH:mm:ss");
+                    }
+                    tmp.Memo = item.Memo;   // メモ
+
+                    reply.ActionPlans.Add(tmp);                               // リストへ追加
+                }
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorCode = 2;
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
+            }
         }
 
         /// <summary>
@@ -95,11 +138,18 @@ namespace DestinationboardServer
         /// <param name="e"></param>
         private void _Service_RecieveRegistActionPlanEvent(object sender, EventArgs e)
         {
+            RegistActionPlansRequest request = ((gRPCArgsRcv)e).Request as RegistActionPlansRequest;    // リクエスト
+            RegistActionPlansReply reply = ((gRPCArgsRcv)e).Replay as RegistActionPlansReply;           // リプライ
+
             try
             {
+                // スタッフ情報の取得処理(DBアクセス)
+                ActionPlanTableM.Update(request);
+
             }
             catch (Exception ex)
             {
+                reply.ErrorCode = 2;
                 _logger.Error(ex.Message);
                 Console.WriteLine(ex.Message);
             }
