@@ -16,6 +16,11 @@ namespace DestinationboardServer
         DestinationbardCommunicationAPIService _Service = null;
 
         /// <summary>
+        /// ロガー
+        /// </summary>
+        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// スタート状態かどうかを示すフラグ
         /// </summary>
         private bool _StartF = false;
@@ -51,6 +56,27 @@ namespace DestinationboardServer
             this._Service.RecieveGetActionPlansEvent += _Service_RecieveGetActionPlansEvent;
 
         }
+        /// <summary>
+        /// サービスのスタート
+        /// </summary>
+        public void Start()
+        {
+            try
+            {
+                // サービスがnullでない && サービスが開始していない
+                if (this._Service != null && !this._StartF)
+                {
+                    // サービスの開始
+                    this._Service.Listen();
+                    this._StartF = true;    // スタートフラグON
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         /// <summary>
         /// 行動予定一覧取得用イベント
@@ -59,7 +85,7 @@ namespace DestinationboardServer
         /// <param name="e"></param>
         private void _Service_RecieveGetActionPlansEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         /// <summary>
@@ -69,7 +95,14 @@ namespace DestinationboardServer
         /// <param name="e"></param>
         private void _Service_RecieveRegistActionPlanEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
+            }
         }
 
         /// <summary>
@@ -79,9 +112,59 @@ namespace DestinationboardServer
         /// <param name="e"></param>
         private void _Service_RecieveGetActionsEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
+            GetActionsReply reply = ((gRPCArgsRcv)e).Replay as GetActionsReply;           // リプライ
+
+            try
+            {
+                GetActionsRequest request = ((gRPCArgsRcv)e).Request as GetActionsRequest;    // リクエスト
+
+                // 行動マスタ情報の取得処理(DBアクセス)
+                var list = ActionMasterM.Select();
+
+                // 取得データを通信用に変換
+                foreach (var item in list)
+                {
+                    ActionMasterReply tmp = new ActionMasterReply();
+                    tmp.ActionID = item.ActionID;                               // 行動ID
+                    tmp.ActionName = item.ActionName;                           // 行動名
+                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 作成日
+                    tmp.CreateUser = item.CreateUser;                           // 作成者
+                    tmp.SortOrder = item.SortOrder;                             // ソート順
+                    tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd");    // 更新日
+                    tmp.UpdateUser = item.UpdateUser;                           // 更新者
+                    reply.ActionList.Add(tmp);                                  // リストへ追加
+                }
+
+                // 行先マスタ情報の取得処理(DBアクセス)
+                var dist_list = DestinationMasterM.Select();
+
+                // 取得データを通信用に変換
+                foreach (var item in dist_list)
+                {
+                    DestinationMasterReply tmp = new DestinationMasterReply();
+                    tmp.ActionID = item.ActionID;                               // 行動ID
+                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 作成日
+                    tmp.CreateUser = item.CreateUser;                           // 作成者
+                    tmp.DestinationID = item.DestinationID;                     // 行先ID
+                    tmp.DestinationName = item.DestinationName;                 // 行先名
+                    tmp.SortOrder = item.SortOrder;                             // ソート順
+                    tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd");    // 更新日
+                    tmp.UpdateUser = item.UpdateUser;                           // 更新者
+
+                    reply.DestinationList.Add(tmp);                                  // リストへ追加
+                }
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorCode = 2;
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
+            }
         }
 
+        #region 行動マスターリスト登録用イベント
         /// <summary>
         /// 行動マスターリスト登録用イベント
         /// </summary>
@@ -89,24 +172,28 @@ namespace DestinationboardServer
         /// <param name="e"></param>
         private void _Service_RecieveRegistActionsEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
-        }
+            RegistActionsRequest request = ((gRPCArgsRcv)e).Request as RegistActionsRequest;    // リクエスト
+            RegistStaffReply reply = ((gRPCArgsRcv)e).Replay as RegistStaffReply;           // リプライ
 
-        /// <summary>
-        /// サービスのスタート
-        /// </summary>
-        public void Start()
-        {
-            // サービスがnullでない && サービスが開始していない
-            if (this._Service != null && !this._StartF)
+            try
             {
-                // サービスの開始
-                this._Service.Listen();
-                this._StartF = true;    // スタートフラグON
+                Console.WriteLine("Recieved");
+                Console.WriteLine(request.ActionMasterList.ToString());
+                Console.WriteLine(request.DestinationMasterList.ToString());
+                // データベース登録処理
+                ActionMasterM.UpdateList(request);
             }
+            catch (Exception ex)
+            {
+                reply.ErrorCode = 2;
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
+            }
+
         }
+        #endregion
 
-
+        #region スタッフ情報取得用イベント
         /// <summary>
         /// スタッフ情報取得用イベント
         /// </summary>
@@ -136,13 +223,16 @@ namespace DestinationboardServer
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                reply.ErrorCode = 2;
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
             }
         }
+        #endregion
 
-
+        #region スタッフ情報登録用イベント
         /// <summary>
         /// スタッフ情報登録用イベント
         /// </summary>
@@ -159,11 +249,14 @@ namespace DestinationboardServer
                 StaffMasterM.UpdateList(request);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 reply.ErrorCode = 2;
+                _logger.Error(ex.Message);
+                Console.WriteLine(ex.Message);
             }
 
         }
+        #endregion
     }
 }

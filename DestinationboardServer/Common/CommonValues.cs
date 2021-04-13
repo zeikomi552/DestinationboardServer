@@ -21,6 +21,13 @@ namespace DestinationboardServer.Common
 			return _Instance;
 
 		}
+		public static DateTime ConvertDateTime(string date_text, string format)
+		{
+			// 作成日時
+			DateTime ret = DateTime.MinValue;
+			DateTime.TryParseExact(date_text, format, null, System.Globalization.DateTimeStyles.None, out ret);
+			return ret;
+		}
 
 		#region サーバー名[ServerName]プロパティ
 		/// <summary>
