@@ -71,6 +71,32 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		}
 		#endregion
 
+		#region 0:帰宅 1:出勤 2:テレワーク出勤[Status]プロパティ
+		/// <summary>
+		/// 0:帰宅 1:出勤 2:テレワーク出勤[Status]プロパティ用変数
+		/// </summary>
+		Int32 _Status = 0;
+		/// <summary>
+		/// 0:帰宅 1:出勤 2:テレワーク出勤[Status]プロパティ
+		/// </summary>
+		[Column("Status")]
+		public Int32 Status
+		{
+			get
+			{
+				return _Status;
+			}
+			set
+			{
+				if (!_Status.Equals(value))
+				{
+					_Status = value;
+					NotifyPropertyChanged("Status");
+				}
+			}
+		}
+		#endregion
+
 		#region 行動ID[ActionID]プロパティ
 		/// <summary>
 		/// 行動ID[ActionID]プロパティ用変数
@@ -290,6 +316,8 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 
 			this.StaffName = item.StaffName;
 
+			this.Status = item.Status;
+
 			this.ActionID = item.ActionID;
 
 			this.ActionName = item.ActionName;
@@ -393,5 +421,6 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		}
 		#endregion
 	}
+
 
 }
