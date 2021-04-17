@@ -202,6 +202,7 @@ namespace DestinationboardServer
                     ActionPlanTableReply tmp = new ActionPlanTableReply();
                     tmp.StaffID = item.StaffID;                 // 従業員情報
                     tmp.StaffName = item.StaffName;             // 従業員名
+                    tmp.Status = item.Status;                   // ステータス情報
                     tmp.ActionID = item.ActionID;               // 行動ID
                     tmp.ActionName = item.ActionName;           // 行動名
                     tmp.DestinationID = item.DestinationID;     // 行先ID
