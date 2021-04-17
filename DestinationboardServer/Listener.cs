@@ -125,8 +125,8 @@ namespace DestinationboardServer
                     reply.ActionPlan.ActionName = tmp.ActionName;           // 行動名
                     reply.ActionPlan.DestinationID = tmp.DestinationID;     // 行先ID
                     reply.ActionPlan.DestinationName = tmp.DestinationName; // 行先名
-                    reply.ActionPlan.FromTime = tmp.FromTime.HasValue ? tmp.FromTime.Value.ToString("yyyy/MM/dd HH:mm/ss") : string.Empty;  // 開始時刻
-                    reply.ActionPlan.ToTime = tmp.ToTime.HasValue ? tmp.ToTime.Value.ToString("yyyy/MM/dd HH:mm/ss") : string.Empty;        // 終了時刻
+                    reply.ActionPlan.FromTime = tmp.FromTime.HasValue ? tmp.FromTime.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty;  // 開始時刻
+                    reply.ActionPlan.ToTime = tmp.ToTime.HasValue ? tmp.ToTime.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty;        // 終了時刻
                 }
                 // 行動予定が登録されていない
                 else
