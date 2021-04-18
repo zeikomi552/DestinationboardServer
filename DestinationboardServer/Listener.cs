@@ -127,6 +127,8 @@ namespace DestinationboardServer
                     reply.ActionPlan.DestinationName = tmp.DestinationName; // 行先名
                     reply.ActionPlan.FromTime = tmp.FromTime.HasValue ? tmp.FromTime.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty;  // 開始時刻
                     reply.ActionPlan.ToTime = tmp.ToTime.HasValue ? tmp.ToTime.Value.ToString("yyyy/MM/dd HH:mm:ss") : string.Empty;        // 終了時刻
+                    reply.ActionPlan.Memo = tmp.Memo;   // メモ
+
                 }
                 // 行動予定が登録されていない
                 else
