@@ -109,7 +109,10 @@ namespace DestinationboardServer.Common.Config
 		}
 		#endregion
 
-
+		#region コンフィグファイルの保存処理
+		/// <summary>
+		/// コンフィグファイルの保存処理
+		/// </summary>
 		public void SaveConfig()
 		{
 			try
@@ -123,12 +126,13 @@ namespace DestinationboardServer.Common.Config
 				_logger.Error(e.Message);
 			}
 		}
+        #endregion
 
-		#region コンフィグファイルの存在確認と存在しない場合は初期値で作成
-		/// <summary>
-		/// コンフィグファイルの存在確認と存在しない場合は初期値で作成
-		/// </summary>
-		private void ConfigCheckCreate()
+        #region コンフィグファイルの存在確認と存在しない場合は初期値で作成
+        /// <summary>
+        /// コンフィグファイルの存在確認と存在しない場合は初期値で作成
+        /// </summary>
+        private void ConfigCheckCreate()
 		{
 			// Configフォルダパスの確認
 			if (!Directory.Exists(_ConfigFolder))
@@ -148,6 +152,7 @@ namespace DestinationboardServer.Common.Config
 		}
 		#endregion
 
+		#region 値のコピー
 		/// <summary>
 		/// 値のコピー
 		/// </summary>
@@ -158,7 +163,12 @@ namespace DestinationboardServer.Common.Config
 			this.Port = conf.Port;          // ポート番号
 			this.SQLitePath = conf.SQLitePath;	// SQLiteのファイルパス
 		}
+		#endregion
 
+		#region コンフィグファイルのロード処理
+		/// <summary>
+		/// コンフィグファイルのロード処理
+		/// </summary>
 		public void LoadConfig()
         {
 			try
@@ -178,5 +188,6 @@ namespace DestinationboardServer.Common.Config
 				_logger.Error(e.Message);
 			}
 		}
-    }
+		#endregion
+	}
 }
