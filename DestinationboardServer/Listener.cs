@@ -38,12 +38,12 @@ namespace DestinationboardServer
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public Listener()
+        public Listener(string hostname, int port)
         {
             if (this._Service == null)
             {
                 // サービスの作成
-                this._Service = new DestinationbardCommunicationAPIService(CommonValues.GetInstance().ServerName, CommonValues.GetInstance().Port);
+                this._Service = new DestinationbardCommunicationAPIService(hostname, port);
             }
 
             // スタッフ情報登録処理用イベント

@@ -17,12 +17,34 @@ namespace DestinationboardServer.Common.DBManager.SQLite
         public DbSet<StaffMasterBase> DbSet_StaffMaster { get; internal set; }
 
 
-        // 最初にココを変更する
-        string db_file_path = @"C:\Work\develop\DestinationBoard.db";
+		#region SQLiteのファイルパス[SQLitePath]プロパティ
+		/// <summary>
+		/// SQLiteのファイルパス[SQLitePath]プロパティ用変数
+		/// </summary>
+		static string _SQLitePath = @"C\DestinationBoard.db";
+		/// <summary>
+		/// SQLiteのファイルパス[SQLitePath]プロパティ
+		/// </summary>
+		public static string SQLitePath
+		{
+			get
+			{
+				return _SQLitePath;
+			}
+			set
+			{
+				if (!_SQLitePath.Equals(value))
+				{
+					_SQLitePath = value;
+				}
+			}
+		}
+		#endregion
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = new SqliteConnectionStringBuilder { DataSource = db_file_path }.ToString();
+            var connectionString = new SqliteConnectionStringBuilder { DataSource = _SQLitePath }.ToString();
             optionsBuilder.UseSqlite(new SqliteConnection(connectionString));
         }
 
