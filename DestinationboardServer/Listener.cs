@@ -73,6 +73,42 @@ namespace DestinationboardServer
         }
         #endregion
 
+        #region コメント出力処理(受信用)
+        /// <summary>
+        /// コメント出力処理(受信用)
+        /// </summary>
+        /// <param name="api_name">API名</param>
+        /// <param name="values">値</param>
+        private static void RecieveOutput(string api_name, string values)
+        {
+            string messege_output 
+                = string.Format("Recieve:{0} API:{1}\r\nValues:{2}", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                api_name,
+                values
+                );
+            Console.WriteLine(messege_output);
+        }
+        #endregion
+
+        #region コメント出力処理(応答用)
+        /// <summary>
+        /// コメント出力処理(応答用)
+        /// </summary>
+        /// <param name="api_name">API名</param>
+        /// <param name="values">値</param>
+        /// <param name="error_code">エラーコード</param>
+        private static void ReplyOutput(string api_name, string values, int error_code)
+        {
+            string messege_output
+                = string.Format("Reply:{0} API:{1}\r\nValues:{2}\r\nErrorCode:{3}", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                api_name,
+                values,
+                error_code
+                );
+            Console.WriteLine(messege_output);
+        }
+        #endregion
+
         #region 1人分の行動予定を登録するイベント
         /// <summary>
         /// 1人分の行動予定を登録するイベント
@@ -86,8 +122,15 @@ namespace DestinationboardServer
 
             try
             {
+                // 出力
+                RecieveOutput("RegistActionPlan", request.ActionPlan.ToString());
+
+
                 // 行動予定の更新
                 ActionPlanTableM.StaffActionPlanUpdate(request);
+
+                // 出力
+                ReplyOutput("RegistActionPlan", reply.ErrorCode.ToString(), reply.ErrorCode);
 
             }
             catch (Exception ex)
@@ -112,14 +155,19 @@ namespace DestinationboardServer
 
             try
             {
+                // 出力
+                RecieveOutput("GetActionPlan", request.StaffID.ToString());
+
                 // 行動予定の取得
                 var tmp = ActionPlanTableM.StaffActionPlanSelect(request.StaffID);
+                // 従業員マスターからデータを取得する
+                var staff = StaffMasterM.Select(request.StaffID);
 
                 // 行動予定が登録されている
                 if (tmp != null)
                 {
                     reply.ActionPlan.StaffID = tmp.StaffID;                 // 従業員ID
-                    reply.ActionPlan.StaffName = tmp.StaffName;             // 従業員名
+                    reply.ActionPlan.StaffName = staff.StaffName;             // 従業員名(従業員名は従業員マスタから取得する)
                     reply.ActionPlan.Status = tmp.Status;                   // ステータス
                     reply.ActionPlan.ActionID = tmp.ActionID;               // 行動ID
                     reply.ActionPlan.ActionName = tmp.ActionName;           // 行動名
@@ -133,9 +181,6 @@ namespace DestinationboardServer
                 // 行動予定が登録されていない
                 else
                 {
-                    // 従業員マスターからデータを取得する
-                    var staff = StaffMasterM.Select(request.StaffID);
-
                     // 従業員マスターからデータがとれた
                     if (staff != null)
                     {
@@ -147,6 +192,9 @@ namespace DestinationboardServer
                         reply.ErrorCode = 1;    // 1：従業員マスターにデータが登録されていません
                     }
                 }
+
+                // 出力
+                ReplyOutput("RegistActionPlan", reply.ActionPlan.ToString(), reply.ErrorCode);
             }
             catch (Exception ex)
             {
@@ -195,6 +243,9 @@ namespace DestinationboardServer
 
             try
             {
+                // 出力
+                RecieveOutput("RecieveGetActionPlans", "-");
+
                 // スタッフ情報の取得処理(DBアクセス)
                 var list = ActionPlanTableM.Select();
 
@@ -227,6 +278,8 @@ namespace DestinationboardServer
 
                     reply.ActionPlans.Add(tmp);                               // リストへ追加
                 }
+                // 出力
+                ReplyOutput("RecieveGetActionPlans", reply.ActionPlans.ToString(), reply.ErrorCode);
 
             }
             catch (Exception ex)
@@ -277,7 +330,12 @@ namespace DestinationboardServer
 
             try
             {
+
+
                 GetActionsRequest request = ((gRPCArgsRcv)e).Request as GetActionsRequest;    // リクエスト
+
+                // 出力
+                RecieveOutput("RecieveGetActions", "-");
 
                 // 行動マスタ情報の取得処理(DBアクセス)
                 var list = ActionMasterM.Select();
@@ -314,6 +372,8 @@ namespace DestinationboardServer
 
                     reply.DestinationList.Add(tmp);                                  // リストへ追加
                 }
+                // 出力
+                ReplyOutput("RecieveGetActions", reply.ErrorCode.ToString(), reply.ErrorCode);
 
             }
             catch (Exception ex)
@@ -334,15 +394,19 @@ namespace DestinationboardServer
         private void _Service_RecieveRegistActionsEvent(object sender, EventArgs e)
         {
             RegistActionsRequest request = ((gRPCArgsRcv)e).Request as RegistActionsRequest;    // リクエスト
-            RegistStaffReply reply = ((gRPCArgsRcv)e).Replay as RegistStaffReply;           // リプライ
+            RegistActionsReply reply = ((gRPCArgsRcv)e).Replay as RegistActionsReply;           // リプライ
 
             try
             {
-                Console.WriteLine("Recieved");
-                Console.WriteLine(request.ActionMasterList.ToString());
-                Console.WriteLine(request.DestinationMasterList.ToString());
+                // 出力
+                RecieveOutput("RecieveRegistActions", request.DestinationMasterList.ToString());
+
                 // データベース登録処理
                 ActionMasterM.UpdateList(request);
+
+                // 出力
+                ReplyOutput("RegistActionPlan", "-", reply.ErrorCode);
+
             }
             catch (Exception ex)
             {
@@ -367,6 +431,9 @@ namespace DestinationboardServer
 
             try
             {
+                // 出力
+                RecieveOutput("GetStaff", "-");
+
                 // スタッフ情報の取得処理(DBアクセス)
                 var list = StaffMasterM.Select();
 
@@ -383,6 +450,8 @@ namespace DestinationboardServer
                     reply.StaffInfoList.Add(tmp);                               // リストへ追加
                 }
 
+                // 出力
+                ReplyOutput("GetStaff", reply.StaffInfoList.ToString(), reply.ErrorCode);
             }
             catch (Exception ex)
             {
@@ -406,8 +475,14 @@ namespace DestinationboardServer
 
             try
             {
+                // 出力
+                RecieveOutput("RegistStaff", request.StaffInfoList.ToString());
+
                 // データベース登録処理
                 StaffMasterM.UpdateList(request);
+
+                // 出力
+                ReplyOutput("RegistStaff", "-", reply.ErrorCode);
 
             }
             catch (Exception ex)
