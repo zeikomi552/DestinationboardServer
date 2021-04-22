@@ -6,12 +6,17 @@
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
     <Version>0.0.1</Version>
+    <PackageIcon>app-icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Common\Comm\**" />
     <EmbeddedResource Remove="Common\Comm\**" />
     <None Remove="Common\Comm\**" />
+    <None Include="Common\icon\app-icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
