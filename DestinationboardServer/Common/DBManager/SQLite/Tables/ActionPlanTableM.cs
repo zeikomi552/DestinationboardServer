@@ -9,6 +9,13 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 {
     public class ActionPlanTableM : ActionPlanTableBase
     {
+		#region ロガー
+		/// <summary>
+		/// ロガー
+		/// </summary>
+		protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		#endregion
+
 		#region 1人分の行動予定の取得関数
 		/// <summary>
 		/// 1人分の行動予定の取得関数
@@ -17,13 +24,22 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		/// <returns>1人分の行動予定</returns>
 		public static ActionPlanTableBase StaffActionPlanSelect(string staff_id)
 		{
-			using (var db = new SQLiteDataContext())
+			try
 			{
-				var query = from x in db.DbSet_ActionPlanTable
-							where x.StaffID.Equals(staff_id)
-							select x;
+				using (var db = new SQLiteDataContext())
+				{
+					var query = from x in db.DbSet_ActionPlanTable
+								where x.StaffID.Equals(staff_id)
+								select x;
 
-				return query.FirstOrDefault();
+					return query.FirstOrDefault();
+				}
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e.Message);
+				Console.WriteLine(e.Message);
+				return null;
 			}
 		}
 		#endregion
@@ -95,10 +111,12 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 						db.SaveChanges();
 						tran.Commit();
 					}
-					catch (Exception)
+					catch (Exception e)
 					{
 						// ロールバック
 						tran.Rollback();
+						Console.WriteLine(e.Message);
+						_logger.Error(e.Message);
 					}
 				}
 			}
@@ -147,10 +165,12 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 						db.SaveChanges();
 						tran.Commit();
 					}
-					catch (Exception)
+					catch (Exception e)
 					{
 						// ロールバック
 						tran.Rollback();
+						Console.WriteLine(e.Message);
+						_logger.Error(e.Message);
 					}
 				}
 			}

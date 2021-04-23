@@ -9,6 +9,14 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 {
     public class StaffMasterM : StaffMasterBase
     {
+		#region ロガー
+		/// <summary>
+		/// ロガー
+		/// </summary>
+		protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		#endregion
+
+
 		#region 従業員マスター情報をデータベースから取得する関数
 		/// <summary>
 		/// 従業員マスター情報をデータベースから取得する関数
@@ -17,14 +25,23 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		/// <returns>スタッフマスター情報</returns>
 		public static StaffMasterBase Select(string staff_id)
 		{
-			// コンテキストの作成
-			using (var db = new SQLiteDataContext())
+			try
 			{
-				var query = from x in db.DbSet_StaffMaster
-							where x.StaffID.Equals(staff_id)
-							select x;
+				// コンテキストの作成
+				using (var db = new SQLiteDataContext())
+				{
+					var query = from x in db.DbSet_StaffMaster
+								where x.StaffID.Equals(staff_id)
+								select x;
 
-				return query.FirstOrDefault();
+					return query.FirstOrDefault();
+				}
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e.Message);
+				Console.WriteLine(e.Message);
+				return null;
 			}
 		}
 		#endregion
@@ -75,10 +92,12 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 						db.SaveChanges();
 						tran.Commit();
 					}
-					catch (Exception)
+					catch (Exception e)
 					{
 						// ロールバック
 						tran.Rollback();
+						Console.WriteLine(e.Message);
+						_logger.Error(e.Message);
 					}
 				}
 			}
