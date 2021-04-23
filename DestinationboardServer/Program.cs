@@ -23,7 +23,6 @@ namespace DestinationboardServer
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            _logger.Error("test");
             try
             {
                 // Configの取得処理
