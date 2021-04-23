@@ -89,7 +89,7 @@ namespace DestinationboardServer.Common.Config
 		/// <summary>
 		/// SQLiteのファイルパス[SQLitePath]プロパティ用変数
 		/// </summary>
-		string _SQLitePath = @".\Config\DestinationBoard.db";
+		string _SQLitePath = @".\db\DestinationBoard.db";
 		/// <summary>
 		/// SQLiteのファイルパス[SQLitePath]プロパティ
 		/// </summary>
