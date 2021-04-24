@@ -10,6 +10,14 @@
     <ApplicationIcon>Common\icon\app-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\Debug\DestinationboardServer\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\Release\DestinationboardServer\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Common\Comm\**" />
     <EmbeddedResource Remove="Common\Comm\**" />
