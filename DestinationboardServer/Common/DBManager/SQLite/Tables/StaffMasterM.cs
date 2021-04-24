@@ -16,7 +16,6 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		#endregion
 
-
 		#region 従業員マスター情報をデータベースから取得する関数
 		/// <summary>
 		/// 従業員マスター情報をデータベースから取得する関数

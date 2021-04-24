@@ -135,9 +135,6 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
         #endregion
         #endregion
 
-
-
-
         #region テーブル情報→Replyに変換する
         /// <summary>
         /// テーブル情報→Replyに変換する
@@ -197,7 +194,6 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
             }
         }
         #endregion
-
 
         #region リクエスト形式からテーブル形式に変換する
         /// <summary>
@@ -259,6 +255,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
         }
         #endregion
 
+        #region リストの更新処理
         /// <summary>
         /// リストの更新処理
         /// </summary>
@@ -302,5 +299,6 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                 }
             }
         }
+        #endregion
     }
 }
