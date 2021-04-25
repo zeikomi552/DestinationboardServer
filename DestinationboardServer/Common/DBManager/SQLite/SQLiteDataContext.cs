@@ -21,7 +21,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite
 		/// <summary>
 		/// SQLiteのファイルパス[SQLitePath]プロパティ用変数
 		/// </summary>
-		static string _SQLitePath = @"C\DestinationBoard.db";
+		static string _SQLitePath = @"C:\Work\DestinationBoard.db";
 		/// <summary>
 		/// SQLiteのファイルパス[SQLitePath]プロパティ
 		/// </summary>

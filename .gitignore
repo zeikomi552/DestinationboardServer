@@ -8,3 +8,5 @@
 /.vs/DestinationboardServer/v16
 /.vs/DestinationboardServer/DesignTimeBuild
 /DestinationboardServer/bin/Release
+/DestinationboardServerTests/bin
+/DestinationboardServerTests/obj

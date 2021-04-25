@@ -259,8 +259,9 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
         /// <summary>
         /// リストの更新処理
         /// </summary>
-        /// <param name="request"></param>
-        public static void UpdateList(RegistActionsRequest request)
+        /// <param name="request">リクエスト</param>
+        /// <returns>true:成功 false:失敗（ロールバック）</returns>
+        public static bool UpdateList(RegistActionsRequest request)
         {
             using (var db = new SQLiteDataContext())
             {
@@ -289,12 +290,14 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                         // コミット
                         db.SaveChanges();
                         tran.Commit();
+                        return true;
                     }
                     catch (Exception e)
                     {
                         tran.Rollback();
                         Console.WriteLine(e.Message);
                         _logger.Error(e.Message);
+                        return false;
                     }
                 }
             }

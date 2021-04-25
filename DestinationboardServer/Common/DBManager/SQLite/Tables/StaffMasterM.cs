@@ -45,6 +45,37 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		}
 		#endregion
 
+		#region リクエスト情報をテーブル情報へ変換する
+		/// <summary>
+		/// リクエスト情報をテーブル情報へ変換する
+		/// </summary>
+		/// <param name="request">リクエスト</param>
+		/// <returns>テーブル情報</returns>
+		public static StaffMasterM RequestToTable(StaffMasterRequest request)
+		{
+			StaffMasterM ret = new StaffMasterM();
+			ret.StaffID = request.StaffID;          // 従業員ID
+			ret.StaffName = request.StaffName;      // 従業員名
+			ret.Display = request.Display;          // 表示・非表示
+			ret.SortOrder = request.SortOrder;      // 並び順
+			ret.CreateDate = CommonValues.ConvertDateTime(request.CreateDate, "yyyy/MM/dd HH:mm:ss");    // 作成日時
+			ret.CreateUser = request.CreateUser;    // 作成者
+			return ret;
+		}
+		#endregion
+
+		public static StaffMasterRequest TableToRequest(StaffMasterBase table)
+		{
+			StaffMasterRequest ret = new StaffMasterRequest();
+			ret.StaffID = table.StaffID;          // 従業員ID
+			ret.StaffName = table.StaffName;      // 従業員名
+			ret.Display = table.Display;          // 表示・非表示
+			ret.SortOrder = table.SortOrder;      // 並び順
+			ret.CreateDate = table.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 作成日時
+			ret.CreateUser = table.CreateUser;    // 作成者
+			return ret;
+		}
+
 		#region 従業員マスターの更新処理
 		/// <summary>
 		/// 従業員マスターの更新処理
@@ -77,13 +108,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 						// 要求のあったデータをデータベースに登録していく
 						foreach (var tmp in request.StaffInfoList)
 						{
-							StaffMasterM insert_item = new StaffMasterM();
-							insert_item.StaffID = tmp.StaffID;			// 従業員ID
-							insert_item.StaffName = tmp.StaffName;		// 従業員名
-							insert_item.Display = tmp.Display;			// 表示・非表示
-							insert_item.SortOrder = tmp.SortOrder;		// 並び順
-							insert_item.CreateDate = DateTime.Today;	// 作成日時
-							insert_item.CreateUser = tmp.CreateUser;	// 作成者
+							var insert_item = RequestToTable(tmp);
 							db.Add<StaffMasterBase>(insert_item);		// データの追加
 						}
 
