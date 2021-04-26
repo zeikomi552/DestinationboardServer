@@ -272,11 +272,15 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                         // 行動マスターの削除
                         db.DbSet_ActionMaster.RemoveRange(db.DbSet_ActionMaster);
 
+                        string format = "yyyy/MM/dd HH:mm:ss";
+                        var reg_datetime = CommonValues.ConvertDateTime(DateTime.Now.ToString(format), format); // ミリ秒を削除
+
+
                         foreach (var tmp in request.ActionMasterList)
                         {
                             ActionMasterBase table = RequestToTable(tmp);
-                            table.CreateDate = DateTime.Now;
-                            table.UpdateDate = DateTime.Now;
+                            table.CreateDate = reg_datetime;
+                            table.UpdateDate = reg_datetime;
                             db.Add<ActionMasterBase>(table);
                         }
 
@@ -286,8 +290,8 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                         foreach (var tmp in request.DestinationMasterList)
                         {
                             DestinationMasterBase table = RequestToTable(tmp);
-                            table.CreateDate = DateTime.Now;
-                            table.UpdateDate = DateTime.Now;
+                            table.CreateDate = reg_datetime;
+                            table.UpdateDate = reg_datetime;
                             db.Add<DestinationMasterBase>(table);
                         }
 
