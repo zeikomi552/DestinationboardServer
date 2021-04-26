@@ -62,8 +62,8 @@ namespace DestinationboardServerTests.Common.DBManager.SQLite
                 if (prop.PropertyType.Equals(typeof(DateTime)))
                 {
                     // コピー後同じ値が入ってたら失敗
-                    if ((equal && ((DateTime)val).ToString("yyyy/MM/dd").CompareTo(val2 == null ? string.Empty : val2.ToString()) != 0)
-                        || (!equal && ((DateTime)val).ToString("yyyy/MM/dd").CompareTo(val2 == null ? string.Empty : val2.ToString()) == 0))
+                    if ((equal && ((DateTime)val).ToString("yyyy/MM/dd HH:mm:ss").CompareTo(val2 == null ? string.Empty : val2.ToString()) != 0)
+                        || (!equal && ((DateTime)val).ToString("yyyy/MM/dd HH:mm:ss").CompareTo(val2 == null ? string.Empty : val2.ToString()) == 0))
                     {
                         Assert.Fail(string.Format("property name:{0} test{1}, check{2}", prop.Name, val.ToString(), val2.ToString()));
                     }

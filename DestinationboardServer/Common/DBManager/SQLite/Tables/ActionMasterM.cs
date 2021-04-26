@@ -31,10 +31,10 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                 ActionMasterReply tmp = new ActionMasterReply();
                 tmp.ActionID = item.ActionID;                               // 行動ID
                 tmp.ActionName = item.ActionName;                           // 行動名
-                tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 作成日
+                tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 作成日
                 tmp.CreateUser = item.CreateUser;                           // 作成者
                 tmp.SortOrder = item.SortOrder;                             // ソート順
-                tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd");    // 更新日
+                tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 更新日
                 tmp.UpdateUser = item.UpdateUser;                           // 更新者
                 return tmp;
             }
@@ -60,10 +60,10 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                 ActionMasterBase tmp = new ActionMasterBase();
                 tmp.ActionID = item.ActionID;                               // 行動ID
                 tmp.ActionName = item.ActionName;                           // 行動名
-                tmp.CreateDate = CommonValues.ConvertDateTime(item.CreateDate, "yyyy/MM/dd");   // 作成日時
+                tmp.CreateDate = CommonValues.ConvertDateTime(item.CreateDate, "yyyy/MM/dd HH:mm:ss");   // 作成日時
                 tmp.CreateUser = item.CreateUser;                           // 作成者
                 tmp.SortOrder = item.SortOrder;                             // ソート順
-                tmp.UpdateDate = CommonValues.ConvertDateTime(item.UpdateDate, "yyyy/MM/dd");   // 更新日時
+                tmp.UpdateDate = CommonValues.ConvertDateTime(item.UpdateDate, "yyyy/MM/dd HH:mm:ss");   // 更新日時
                 tmp.UpdateUser = item.UpdateUser;                           // 更新者
                 return tmp;
             }
@@ -89,10 +89,10 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                 ActionMasterRequest tmp = new ActionMasterRequest();
                 tmp.ActionID = item.ActionID;                               // 行動ID
                 tmp.ActionName = item.ActionName;                           // 行動名
-                tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 作成日
+                tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 作成日
                 tmp.CreateUser = item.CreateUser;                           // 作成者
                 tmp.SortOrder = item.SortOrder;                             // ソート順
-                tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd");    // 更新日
+                tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 更新日
                 tmp.UpdateUser = item.UpdateUser;                           // 更新者
                 return tmp;
             }
@@ -121,7 +121,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
                 tmp.CreateDate = CommonValues.ConvertDateTime(item.CreateDate, "yyyy/MM/dd HH:mm:ss");   // 作成日時
                 tmp.CreateUser = item.CreateUser;                           // 作成者
                 tmp.SortOrder = item.SortOrder;                             // ソート順
-                tmp.UpdateDate = CommonValues.ConvertDateTime(item.UpdateDate, "yyyy/MM/dd HH:mm:ss:");   // 更新日時
+                tmp.UpdateDate = CommonValues.ConvertDateTime(item.UpdateDate, "yyyy/MM/dd HH:mm:ss");   // 更新日時
                 tmp.UpdateUser = item.UpdateUser;                           // 更新者
                 return tmp;
             }

@@ -346,10 +346,10 @@ namespace DestinationboardServer
                     ActionMasterReply tmp = new ActionMasterReply();
                     tmp.ActionID = item.ActionID;                               // 行動ID
                     tmp.ActionName = item.ActionName;                           // 行動名
-                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 作成日
+                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 作成日
                     tmp.CreateUser = item.CreateUser;                           // 作成者
                     tmp.SortOrder = item.SortOrder;                             // ソート順
-                    tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd");    // 更新日
+                    tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 更新日
                     tmp.UpdateUser = item.UpdateUser;                           // 更新者
                     reply.ActionList.Add(tmp);                                  // リストへ追加
                 }
@@ -362,12 +362,12 @@ namespace DestinationboardServer
                 {
                     DestinationMasterReply tmp = new DestinationMasterReply();
                     tmp.ActionID = item.ActionID;                               // 行動ID
-                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 作成日
+                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 作成日
                     tmp.CreateUser = item.CreateUser;                           // 作成者
                     tmp.DestinationID = item.DestinationID;                     // 行先ID
                     tmp.DestinationName = item.DestinationName;                 // 行先名
                     tmp.SortOrder = item.SortOrder;                             // ソート順
-                    tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd");    // 更新日
+                    tmp.UpdateDate = item.UpdateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 更新日
                     tmp.UpdateUser = item.UpdateUser;                           // 更新者
 
                     reply.DestinationList.Add(tmp);                                  // リストへ追加
@@ -444,7 +444,7 @@ namespace DestinationboardServer
                     tmp.StaffID = item.StaffID;                                 // スタッフ情報
                     tmp.SortOrder = item.SortOrder;                             // ソート順
                     tmp.StaffName = item.StaffName;                             // スタッフ名
-                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd");    // 日付
+                    tmp.CreateDate = item.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 日付
                     tmp.CreateUser = item.CreateUser;                           // ユーザー名
                     tmp.Display = item.Display;                                 // 表示/非表示
                     reply.StaffInfoList.Add(tmp);                               // リストへ追加
