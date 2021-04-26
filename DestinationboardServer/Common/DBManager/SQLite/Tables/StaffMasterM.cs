@@ -89,14 +89,34 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 					try
 					{
 						var items = db.DbSet_StaffMaster.ToList<StaffMasterBase>();
+						var items_actionplans = db.DbSet_ActionPlanTable.ToList<ActionPlanTableBase>();
 
 						/* EntityFrameworkに全データを一度に削除する方法がないので
 						 * 一つずつ取り出して削除していく */
 						foreach (var item in items)
 						{
-							// 従業員IDが一致するものを探す
-							var del_item_tmp = db.DbSet_StaffMaster.SingleOrDefault(x => x.StaffID.Equals(item.StaffID));
+							var check_request_staff = (from x in request.StaffInfoList
+											   where x.StaffID.Equals(item.StaffID)
+											   select x).FirstOrDefault();
 
+							var rv_action_plan = (from x in items_actionplans
+												  where x.StaffID.Equals(item.StaffID)
+												  select x).FirstOrDefault();
+
+							// 行動情報には当該従業員IDが存在するが
+							// 送信情報には当該従業員情報が存在しない
+							// 従業員マスターから当該従業員情報が削除された
+							if (check_request_staff == null && rv_action_plan != null)
+							{
+								db.DbSet_ActionPlanTable.Remove(rv_action_plan);
+							}
+
+
+							// 従業員IDが一致するものを探す
+							var del_item_tmp = (from x in items
+												where x.StaffID.Equals(item.StaffID)
+												select x).FirstOrDefault();                         
+							
 							// 見つかった
 							if (del_item_tmp != null)
 							{
