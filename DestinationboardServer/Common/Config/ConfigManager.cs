@@ -109,6 +109,30 @@ namespace DestinationboardServer.Common.Config
 		}
 		#endregion
 
+		#region ログ保存用パス[SQLiteLogPath]プロパティ
+		/// <summary>
+		/// ログ保存用パス[SQLiteLogPath]プロパティ用変数
+		/// </summary>
+		string _SQLiteLogPath = @".\db\DestinationBoardLog.db";
+		/// <summary>
+		/// ログ保存用パス[SQLiteLogPath]プロパティ
+		/// </summary>
+		public string SQLiteLogPath
+		{
+			get
+			{
+				return _SQLiteLogPath;
+			}
+			set
+			{
+				if (!_SQLiteLogPath.Equals(value))
+				{
+					_SQLiteLogPath = value;
+				}
+			}
+		}
+		#endregion
+
 		#region コンフィグファイルの保存処理
 		/// <summary>
 		/// コンフィグファイルの保存処理

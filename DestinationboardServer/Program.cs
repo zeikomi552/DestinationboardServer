@@ -31,8 +31,12 @@ namespace DestinationboardServer
 
                 // SQLite用のファイルパス
                 SQLiteDataContext.SQLitePath = config.SQLitePath;
+                // SQLite用のログファイルパス
+                SQLiteLogDataContext.SQLitePath = config.SQLiteLogPath;
+
                 // ログ出力
                 Console.WriteLine(string.Format("SQLitePath={0}", config.SQLitePath));
+                Console.WriteLine(string.Format("SQLiteLogPath={0}", config.SQLiteLogPath));
                 Console.WriteLine(string.Format("Port={0}", config.Port));
 
                 if (!File.Exists(config.SQLitePath))
