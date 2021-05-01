@@ -129,6 +129,9 @@ namespace DestinationboardServer
                 // 行動予定の更新
                 ActionPlanTableM.StaffActionPlanUpdate(request);
 
+                // 行動予定のログの記録
+                ActionPlanTableM.StaffActionPlanLogInsert(request);
+
                 // 出力
                 ReplyOutput("RegistActionPlan", reply.ErrorCode.ToString(), reply.ErrorCode);
 
@@ -290,32 +293,6 @@ namespace DestinationboardServer
             }
         }
         #endregion
-
-        //#region 行動予定登録用イベント
-        ///// <summary>
-        ///// 行動予定登録用イベント
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void _Service_RecieveRegistActionPlansEvent(object sender, EventArgs e)
-        //{
-        //    RegistActionPlansRequest request = ((gRPCArgsRcv)e).Request as RegistActionPlansRequest;    // リクエスト
-        //    RegistActionPlansReply reply = ((gRPCArgsRcv)e).Replay as RegistActionPlansReply;           // リプライ
-
-        //    try
-        //    {
-        //        // スタッフ情報の取得処理(DBアクセス)
-        //        ActionPlanTableM.Update(request);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        reply.ErrorCode = -1;
-        //        _logger.Error(ex.Message);
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //}
-        //#endregion
 
         #region 行動マスター取得用イベント
         /// <summary>

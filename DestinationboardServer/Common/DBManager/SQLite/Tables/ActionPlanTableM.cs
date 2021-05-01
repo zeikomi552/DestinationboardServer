@@ -1,4 +1,5 @@
-﻿using DestinationboardServer.Common.DBManager.SQLite.TablesBase;
+﻿using DestinationboardServer.Common.DBManager.SQLite.Interface;
+using DestinationboardServer.Common.DBManager.SQLite.TablesBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 {
-    public class ActionPlanTableM : ActionPlanTableBase
-    {
+    public class ActionPlanTableM : ActionPlanTableBase, IActionPlanTable
+	{
 		#region ロガー
 		/// <summary>
 		/// ロガー
@@ -49,40 +50,37 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		/// gRPC用データからテーブルデータへ変換する
 		/// </summary>
 		/// <param name="request">gRPC用リクエストデータ</param>
-		/// <returns>テーブルデータ</returns>
-		public static ActionPlanTableBase RequestToTable(RegistActionPlanRequest request)
+		public static void RequestToTable(RegistActionPlanRequest request, ref IActionPlanTable action)
 		{
-
-			ActionPlanTableBase tmp = new ActionPlanTableBase();
-			tmp.StaffID = request.ActionPlan.StaffID;                   // 従業員ID
-			tmp.StaffName = request.ActionPlan.StaffName;               // 従業員名
-			tmp.Status = request.ActionPlan.Status;                     // ステータス
-			tmp.ActionID = request.ActionPlan.ActionID;                 // 行動ID
-			tmp.ActionName = request.ActionPlan.ActionName;             // 行動名
-			tmp.DestinationID = request.ActionPlan.DestinationID;       // 行先ID
-			tmp.DestinationName = request.ActionPlan.DestinationName;   // 行先名
+			action.StaffID = request.ActionPlan.StaffID;                   // 従業員ID
+			action.StaffName = request.ActionPlan.StaffName;               // 従業員名
+			action.Status = request.ActionPlan.Status;                     // ステータス
+			action.ActionID = request.ActionPlan.ActionID;                 // 行動ID
+			action.ActionName = request.ActionPlan.ActionName;             // 行動名
+			action.DestinationID = request.ActionPlan.DestinationID;       // 行先ID
+			action.DestinationName = request.ActionPlan.DestinationName;   // 行先名
 
 			DateTime ret;
-			tmp.FromTime = null;
+			action.FromTime = null;
 
 			// 開始時刻をデータベース登録用に型変換
 			if (DateTime.TryParseExact(request.ActionPlan.FromTime, "yyyy/MM/dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out ret))
 			{
-				tmp.FromTime = ret; // 開始時刻のセット
+				action.FromTime = ret; // 開始時刻のセット
 			}
 
 
-			tmp.ToTime = null;
+			action.ToTime = null;
 			// 終了時刻をデータベース登録用に型変換
 			if (DateTime.TryParseExact(request.ActionPlan.ToTime, "yyyy/MM/dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out ret))
 			{
 				// 終了時刻のセット
-				tmp.ToTime = ret;
+				action.ToTime = ret;
 			}
 
-			tmp.Memo = request.ActionPlan.Memo; // 備考
+			action.Memo = request.ActionPlan.Memo; // 備考
 
-			return tmp;
+
 		}
 		#endregion
 
@@ -148,19 +146,20 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 										  where x.StaffID.Equals(request.ActionPlan.StaffID)
 										  select x).FirstOrDefault();
 
-						var tmp = RequestToTable(request);
+						IActionPlanTable tmp = new ActionPlanTableM();
+						RequestToTable(request, ref tmp);
 
 						// 従業員の行動予定が存在する場合
 						if (staff_item != null)
 						{
 							// 上書き
-							staff_item.Copy(tmp);
+							staff_item.Copy((ActionPlanTableM)tmp);
 						}
 						// 従業員の行動予定が存在しない場合
 						else
 						{
 							// 追加
-							db.Add<ActionPlanTableBase>(tmp);
+							db.Add<ActionPlanTableBase>((ActionPlanTableM)tmp);
 						}
 
 						// コミット
@@ -180,6 +179,42 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 			}
 		}
 		#endregion
+
+		public static bool StaffActionPlanLogInsert(RegistActionPlanRequest request)
+		{
+			// コンテキストの作成
+			using (var db = new SQLiteLogDataContext())
+			{
+				using (var tran = db.Database.BeginTransaction()) // トランザクション開始
+				{
+					try
+					{
+						var items = db.DbSet_ActionPlanTableLog.ToList<ActionPlanTableLogBase>();
+
+						IActionPlanTable action = new ActionPlanTableLogM();
+						RequestToTable(request, ref action);
+
+						string format = "yyyy/MM/dd HH:mm:ss";
+						((ActionPlanTableLogM)action).RegTime = CommonValues.ConvertDateTime(DateTime.Now.ToString(format), format); // ミリ秒を削除
+
+						db.Add<ActionPlanTableLogBase>((ActionPlanTableLogM)action);
+
+						// コミット
+						db.SaveChanges();
+						tran.Commit();
+						return true;
+					}
+					catch (Exception e)
+					{
+						// ロールバック
+						tran.Rollback();
+						Console.WriteLine(e.Message);
+						_logger.Error(e.Message);
+						return false;
+					}
+				}
+			}
+		}
 
 		#region 更新処理
 		/// <summary>

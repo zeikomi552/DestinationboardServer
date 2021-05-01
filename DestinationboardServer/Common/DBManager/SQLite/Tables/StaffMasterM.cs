@@ -58,12 +58,20 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 			ret.StaffName = request.StaffName;      // 従業員名
 			ret.Display = request.Display;          // 表示・非表示
 			ret.SortOrder = request.SortOrder;      // 並び順
+			ret.QRCode = request.QRCode;			// 従業員識別用QRコード
+			ret.FelicaID = request.FelicaID;		// 従業員識別用FelicaID
 			ret.CreateDate = CommonValues.ConvertDateTime(request.CreateDate, "yyyy/MM/dd HH:mm:ss");    // 作成日時
 			ret.CreateUser = request.CreateUser;    // 作成者
 			return ret;
 		}
 		#endregion
 
+		#region Tableカラムからリクエストへの変換
+		/// <summary>
+		/// Tableカラムからリクエストへの変換
+		/// </summary>
+		/// <param name="table">テーブル要素</param>
+		/// <returns>リクエスト</returns>
 		public static StaffMasterRequest TableToRequest(StaffMasterBase table)
 		{
 			StaffMasterRequest ret = new StaffMasterRequest();
@@ -71,10 +79,13 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 			ret.StaffName = table.StaffName;      // 従業員名
 			ret.Display = table.Display;          // 表示・非表示
 			ret.SortOrder = table.SortOrder;      // 並び順
+			ret.QRCode = table.QRCode;			  // 従業員識別用QRコード
+			ret.FelicaID = table.FelicaID;        // 従業員識別用FelicaID
 			ret.CreateDate = table.CreateDate.ToString("yyyy/MM/dd HH:mm:ss");    // 作成日時
 			ret.CreateUser = table.CreateUser;    // 作成者
 			return ret;
 		}
+		#endregion
 
 		#region 従業員マスターの更新処理
 		/// <summary>

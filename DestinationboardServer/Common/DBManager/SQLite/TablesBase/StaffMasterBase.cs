@@ -123,6 +123,58 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 		}
 		#endregion
 
+		#region 従業員識別FelicaID[FelicaID]プロパティ
+		/// <summary>
+		/// 従業員識別FelicaID[FelicaID]プロパティ用変数
+		/// </summary>
+		String _FelicaID = string.Empty;
+		/// <summary>
+		/// 従業員識別FelicaID[FelicaID]プロパティ
+		/// </summary>
+		[Column("FelicaID")]
+		public String FelicaID
+		{
+			get
+			{
+				return _FelicaID;
+			}
+			set
+			{
+				if (_FelicaID == null || !_FelicaID.Equals(value))
+				{
+					_FelicaID = value;
+					NotifyPropertyChanged("FelicaID");
+				}
+			}
+		}
+		#endregion
+
+		#region 従業員識別QRコード[QRCode]プロパティ
+		/// <summary>
+		/// 従業員識別QRコード[QRCode]プロパティ用変数
+		/// </summary>
+		String _QRCode = string.Empty;
+		/// <summary>
+		/// 従業員識別QRコード[QRCode]プロパティ
+		/// </summary>
+		[Column("QRCode")]
+		public String QRCode
+		{
+			get
+			{
+				return _QRCode;
+			}
+			set
+			{
+				if (_QRCode == null || !_QRCode.Equals(value))
+				{
+					_QRCode = value;
+					NotifyPropertyChanged("QRCode");
+				}
+			}
+		}
+		#endregion
+
 		#region 作成日時[CreateDate]プロパティ
 		/// <summary>
 		/// 作成日時[CreateDate]プロパティ用変数
@@ -215,6 +267,10 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase
 			this.StaffName = item.StaffName;
 
 			this.Display = item.Display;
+
+			this.FelicaID = item.FelicaID;
+
+			this.QRCode = item.QRCode;
 
 			this.CreateDate = item.CreateDate;
 
