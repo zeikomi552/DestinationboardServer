@@ -55,7 +55,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables
 		{
 			StaffMasterM ret = new StaffMasterM();
 			ret.StaffID = request.StaffID;          // 従業員ID
-			ret.StaffName = request.StaffName;      // 従業員名
+			ret.StaffName = request.StaffName;      // 従業員名	
 			ret.Display = request.Display;          // 表示・非表示
 			ret.SortOrder = request.SortOrder;      // 並び順
 			ret.QRCode = request.QRCode;			// 従業員識別用QRコード
