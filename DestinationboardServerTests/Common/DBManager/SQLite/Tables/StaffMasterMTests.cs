@@ -35,7 +35,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.Tables.Tests
             for (int index = 0; index < 100; index++)
             {
                 var row_data = StaffMasterBaseTests.SampleData("staff_id" + index.ToString(), index, "staff_name" + index.ToString(), true,
-                    DateTime.Today.AddDays(index), "create_user" + index.ToString());
+                    DateTime.Today.AddDays(index), "create_user" + index.ToString(), "qr_code" + index.ToString(), "felica_id" + index.ToString());
 
                 var req = StaffMasterM.TableToRequest(row_data);
                 request.StaffInfoList.Add(req);

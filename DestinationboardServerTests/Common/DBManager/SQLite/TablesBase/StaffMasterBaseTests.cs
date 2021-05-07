@@ -14,7 +14,7 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase.Tests
     public class StaffMasterBaseTests
     {
         public static StaffMasterBase SampleData(string staff_id, int sort_order, string staff_name, bool display,
-            DateTime create_date, string create_user)
+            DateTime create_date, string create_user, string qr_code, string felica_id)
         {
             StaffMasterBase sample = new StaffMasterBase();
             sample.StaffID = staff_id;
@@ -23,6 +23,8 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase.Tests
             sample.Display = display;
             sample.CreateDate = create_date;
             sample.CreateUser = create_user;
+            sample.QRCode = qr_code;
+            sample.FelicaID = felica_id;
 
             return sample;
         }
@@ -30,12 +32,12 @@ namespace DestinationboardServer.Common.DBManager.SQLite.TablesBase.Tests
         public static StaffMasterBase TestData1()
         {
             return SampleData("staff_id", -1, "staff_name", true, DateTime.Today,
-                "create_user");
+                "create_user", "qr_code", "felica_id");
         }
         public static StaffMasterBase TestData2()
         {
             return SampleData("staff_id", -2, "staff_name2", true, DateTime.Today.AddDays(1),
-                "create_user2");
+                "create_user2", "qr_code", "felica_id");
         }
 
 
