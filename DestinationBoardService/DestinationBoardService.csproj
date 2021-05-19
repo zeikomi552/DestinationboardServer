@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dotnet-DestinationBoardService-77B19308-6276-4589-ACB6-B2D13FB2460F</UserSecretsId>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Config\DestinationServer.conf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="SeriveRegister\DestinationBoardServiceRegister.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
