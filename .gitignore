@@ -13,3 +13,5 @@
 /.vs/DestinationBoardService
 /DestinationBoardService/bin/Debug/net5.0
 /DestinationBoardService/obj
+/DestinationboardServerInstaller/Release
+/DestinationboardServerInstaller/Debug
