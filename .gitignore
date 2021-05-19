@@ -10,3 +10,6 @@
 /DestinationboardServer/bin/Release
 /DestinationboardServerTests/bin
 /DestinationboardServerTests/obj
+/.vs/DestinationBoardService
+/DestinationBoardService/bin/Debug/net5.0
+/DestinationBoardService/obj

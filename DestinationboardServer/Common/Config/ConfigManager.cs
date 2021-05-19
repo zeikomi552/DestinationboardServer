@@ -22,7 +22,7 @@ namespace DestinationboardServer.Common.Config
 		/// <summary>
 		/// コンフィグファイルパス
 		/// </summary>
-		string ConfigPath
+		public string ConfigPath
 		{
 			get
 			{
