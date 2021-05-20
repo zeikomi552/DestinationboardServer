@@ -7,7 +7,7 @@ set CUR_DIR=%CD%
 set APP_NAME=\DestinationBoardService.exe
 
 echo Regist Service For DestinationBoard
-sc create DestinationBoardService binPath=%CUR_DIR%%APP_NAME% start=auto
+sc create DestinationBoardService binPath="%CUR_DIR%%APP_NAME%" start=auto
 
 
 echo Wait For 10 second
