@@ -10,15 +10,33 @@ namespace DestinationboardServer.Common.Config
 {
 	public class ConfigManager
 	{
+		public ConfigManager()
+		{
+			// Configフォルダのパス取得
+			this.SQLitePath = Path.Combine(Utilities.GetApplicationFolder(), "db", "DestinationBoard.db");
+
+			// Configフォルダのパス取得
+			this.SQLiteLogPath = Path.Combine(Utilities.GetApplicationFolder(), "db", "DestinationBoardLog.db");
+		}
+
+		#region ロガー
 		/// <summary>
-		/// コンフィグフォルダ
+		/// ロガー
 		/// </summary>
-		const string _ConfigFolder = "Config";
+		protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        #endregion
+
+        #region コンフィグ
+        /// <summary>
+        /// コンフィグフォルダ
+        /// </summary>
+        const string _ConfigFolder = "Config";
 		/// <summary>
 		/// コンフィグファイル名
 		/// </summary>
 		const string _ConfigFileName = "DestinationServer.conf";
 
+		#region コンフィグファイルパス
 		/// <summary>
 		/// コンフィグファイルパス
 		/// </summary>
@@ -26,16 +44,60 @@ namespace DestinationboardServer.Common.Config
 		{
 			get
 			{
-				return _ConfigFolder + @"\" + _ConfigFileName;
+				// パスの結合
+				return Path.Combine(Utilities.GetApplicationFolder(), _ConfigFolder, _ConfigFileName);
 			}
 		}
+		#endregion
 
-
-		#region ロガー
+		#region アプリケーションの初回起動チェック
 		/// <summary>
-		/// ロガー
+		/// アプリケーションの初回起動チェック
 		/// </summary>
-		protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		public void InitializeApplication()
+		{
+			// Configフォルダのパス取得
+			string conf_dir = Path.Combine(Utilities.GetApplicationFolder(), _ConfigFolder);
+
+			// 存在確認
+			if (!Directory.Exists(conf_dir))
+			{
+				// 存在しない場合は作成
+				Utilities.CreateDirectory(conf_dir);
+			}
+
+			// Configファイルの存在確認、存在しない場合は作成
+			ConfigCheckCreate();
+
+			// コンフィグファイルのロード
+			LoadConfig();
+
+			if (!File.Exists(this.SQLitePath))
+			{
+				Console.WriteLine("行先ボードデータベースが存在しません。作成します。");
+				Console.WriteLine("SQLitePath={0}", this.SQLitePath);
+
+				Utilities.CreateCurrentDirectory(this.SQLitePath);
+				File.Copy(@"db\DestinationBoard_org.db", this.SQLitePath);
+			}
+
+			if (!File.Exists(this.SQLiteLogPath))
+			{
+				Console.WriteLine("行先ボード履歴用データベースが存在しません。作成します。");
+				Console.WriteLine("SQLitePath={0}", this.SQLiteLogPath);
+
+				Utilities.CreateCurrentDirectory(this.SQLiteLogPath);
+				File.Copy(@"db\DestinationBoardLog_org.db", this.SQLiteLogPath);
+			}
+
+			while ((!File.Exists(this.SQLitePath))||(!File.Exists(this.SQLiteLogPath)))
+			{
+				// コピー完了待ち
+				System.Threading.Thread.Sleep(100);
+			}
+		}
+		#endregion
+
 		#endregion
 
 		#region 接続先名[HostName]プロパティ
@@ -61,6 +123,7 @@ namespace DestinationboardServer.Common.Config
 			}
 		}
 		#endregion
+
 		#region ポート番号[Port]プロパティ
 		/// <summary>
 		/// ポート番号[Port]プロパティ用変数
@@ -89,7 +152,7 @@ namespace DestinationboardServer.Common.Config
 		/// <summary>
 		/// SQLiteのファイルパス[SQLitePath]プロパティ用変数
 		/// </summary>
-		string _SQLitePath = @".\db\DestinationBoard.db";
+		string _SQLitePath = string.Empty;
 		/// <summary>
 		/// SQLiteのファイルパス[SQLitePath]プロパティ
 		/// </summary>
@@ -113,7 +176,7 @@ namespace DestinationboardServer.Common.Config
 		/// <summary>
 		/// ログ保存用パス[SQLiteLogPath]プロパティ用変数
 		/// </summary>
-		string _SQLiteLogPath = @".\db\DestinationBoardLog.db";
+		string _SQLiteLogPath = string.Empty;
 		/// <summary>
 		/// ログ保存用パス[SQLiteLogPath]プロパティ
 		/// </summary>
@@ -150,19 +213,14 @@ namespace DestinationboardServer.Common.Config
 				_logger.Error(e.Message);
 			}
 		}
-        #endregion
+		#endregion
 
-        #region コンフィグファイルの存在確認と存在しない場合は初期値で作成
-        /// <summary>
-        /// コンフィグファイルの存在確認と存在しない場合は初期値で作成
-        /// </summary>
-        private void ConfigCheckCreate()
+		#region コンフィグファイルの存在確認と存在しない場合は初期値で作成
+		/// <summary>
+		/// コンフィグファイルの存在確認と存在しない場合は初期値で作成
+		/// </summary>
+		private void ConfigCheckCreate()
 		{
-			// Configフォルダパスの確認
-			if (!Directory.Exists(_ConfigFolder))
-			{
-				Directory.CreateDirectory(_ConfigFolder);
-			}
 
 			// Configファイルの存在確認
 			if (!File.Exists(ConfigPath))
@@ -171,7 +229,7 @@ namespace DestinationboardServer.Common.Config
 				ConfigManager ini_conf = new ConfigManager();
 
 				// configファイルの作成
-				XMLUtil.Seialize<ConfigManager>(_ConfigFolder + @"\" + _ConfigFileName, ini_conf);
+				XMLUtil.Seialize<ConfigManager>(ConfigPath, ini_conf);
 			}
 		}
 		#endregion

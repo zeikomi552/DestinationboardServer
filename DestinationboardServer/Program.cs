@@ -32,6 +32,11 @@ namespace DestinationboardServer
 
                 // Configの取得処理
                 ConfigManager config = new ConfigManager();
+
+                // 初回起動確認
+                config.InitializeApplication();
+
+                // コンフィグファイルのロード
                 config.LoadConfig();
 
                 // SQLite用のファイルパス
@@ -44,29 +49,6 @@ namespace DestinationboardServer
                 Console.WriteLine(string.Format("SQLitePath={0}", config.SQLitePath));
                 Console.WriteLine(string.Format("SQLiteLogPath={0}", config.SQLiteLogPath));
                 Console.WriteLine(string.Format("Port={0}", config.Port));
-
-                // SQLiteファイルの存在確認
-                if (!File.Exists(config.SQLitePath))
-                {
-                    StringBuilder msg = new StringBuilder();
-                    msg.AppendLine("データベースファイル(DestinationBoard.db)が見つかりません。");
-                    msg.AppendLine(string.Format(@"{0}の設定を確認してください。", System.IO.Path.GetFullPath(config.ConfigPath)));
-                    _logger.Error(msg.ToString());
-                    Console.WriteLine(msg.ToString());
-                    Console.ReadLine();
-                    return;
-                }
-
-                // SQLiteファイルの存在確認(Log用)
-                if (!File.Exists(config.SQLiteLogPath))
-                {
-                    StringBuilder msg = new StringBuilder();
-                    msg.AppendLine("データベースファイル(DestinationBoardLog.db)が見つかりません。");
-                    msg.AppendLine(string.Format(@"{0}の設定を確認してください。", System.IO.Path.GetFullPath(config.ConfigPath)));
-                    _logger.Error(msg.ToString());
-                    Console.WriteLine(msg.ToString());
-                    Console.ReadLine();
-                }
 
                 // サービスの作成
                 Listener listener = new Listener(config.HostName, config.Port);

@@ -8,6 +8,8 @@
     <Version>1.0.0</Version>
     <PackageIcon>app-icon.ico</PackageIcon>
     <ApplicationIcon>Common\icon\app-icon.ico</ApplicationIcon>
+    <Authors>Zeikomi552</Authors>
+    <Company>Zeikomi</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -46,10 +48,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="db\DestinationBoard.db">
+    <None Update="db\DestinationBoard_org.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="db\DestinationBoardLog.db">
+    <None Update="db\DestinationBoardLog_org.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="log4net.config">
